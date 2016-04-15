@@ -3,7 +3,7 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aren <marvin@42.fr>                        +#+  +:+       +#+         #
+#    By: nbelkaid <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/07 19:23:39 by aren              #+#    #+#              #
 #    Updated: 2014/11/07 19:23:41 by aren             ###   ########.fr        #
@@ -73,6 +73,7 @@ SRC = ft_isalpha.c \
 	ft_lstadd.c \
 	ft_lstiter.c \
 	ft_lstmap.c \
+	get_next_line.c \
 
 OBJ = $(SRC:.c=.o)
 
