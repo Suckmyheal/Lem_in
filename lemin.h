@@ -10,4 +10,28 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef LEMIN_H
 
+# define LEMIN_H
+# include "libft/libft.h"
+# include "stdio.h"
+# include "unistd.h"
+# include "stdlib.h"
+
+typedef struct	s_room
+{
+	char	*name;
+	char	**link;
+	int		nbr_linl;
+}				t_room;
+
+typedef struct	s_param
+{
+	t_room	*name_room;
+	int		tube;
+	int		salle;
+
+}				t_param;
+
+
+#endif
