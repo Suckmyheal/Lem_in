@@ -24,16 +24,27 @@ int		arraystr_len(char **tab)
 	return (i);
 }
 
-int		arraystr_push_free(char **tab, char *str)
+void	ft_print_arraystr(char **tab)
+{
+	int		i;
+
+	i = 0;
+	while (tab != NULL && tab[i] != NULL)
+	{
+		ft_putendl(tab[i]);
+		i++;
+	}
+}
+
+char		**arraystr_push_free(char **tab, char *str)
 {
 	int		i;
 	char	**new_tab;
-	char	**tmp;
 
 	i = 0;
 	new_tab = (char **)malloc(sizeof(char *) * (arraystr_len(tab) + 2));
 	if (new_tab == NULL)
-		return (-1);
+		return (NULL);
 	while (tab != NULL && tab[i] != NULL)
 	{
 		new_tab[i] = tab[i];
@@ -41,23 +52,11 @@ int		arraystr_push_free(char **tab, char *str)
 	}
 	new_tab[i] = str;
 	new_tab[i + 1] = NULL;
-	tmp = tab;
-	tab = new_tab;
-	free(tmp);
-	return (1);
+	free(tab);
+	return (new_tab);
 }
 
-void	ft_print_arraystr(char **tab)
-{
-	int		i;
 
-	i = 0;
-	while (tab[i] != NULL)
-	{
-		ft_putendl(tab[i]);
-		i++;
-	}
-}
 
 // int		ft_is_correct_line(char *line, t_param *param)
 // {
@@ -107,7 +106,7 @@ int		main(int ac, char **av)
 		return (-1);
 	while (get_next_line(0, &line) == 1)
 	{
-		arraystr_push_free(tab, line);
+		tab = arraystr_push_free(tab, line);
 		ft_print_arraystr(tab);
 	}
 	return (0);
