@@ -69,14 +69,14 @@ int		ft_create_test(t_param *param)
 	param->mat_adj[6][4].value = 0;
 	param->mat_adj[6][5].value = 1;
 	param->mat_adj[6][6].value = 0;
-	param->mat_adj[6][7].value = 1;
+	param->mat_adj[6][7].value = 0;
 	param->mat_adj[7][0].name = ft_strdup("Arrive");
 	param->mat_adj[7][1].value = 0;
 	param->mat_adj[7][2].value = 0;
 	param->mat_adj[7][3].value = 0;
 	param->mat_adj[7][4].value = 0;
 	param->mat_adj[7][5].value = 0;
-	param->mat_adj[7][6].value = 1;
+	param->mat_adj[7][6].value = 0;
 	param->mat_adj[7][7].value = 0; 
 	return (1);
 }

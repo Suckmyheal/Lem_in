@@ -134,15 +134,16 @@ int		ft_pathfinding(t_param *param)
 	i = 0;
 	j = 0;
 	ft_init_tables(param);
-	ft_show_data(param->tab_poids, param->tab_ant, NBR_ROOM, 1);
-	ft_show_data(param->tab_poids, param->tab_ant, NBR_ROOM, 2);
-	while (ft_strcmp(ft_min_poids(param->tab_poids, NBR_ROOM), param->mat_adj[0][NBR_ROOM].name) != 0 && ft_min_poids(param->tab_poids, NBR_ROOM) != NULL)
+	tmp = NULL;
+	while (ft_min_poids(param->tab_poids, NBR_ROOM) != NULL && ft_strcmp(ft_min_poids(param->tab_poids, NBR_ROOM), param->mat_adj[0][NBR_ROOM].name) != 0)
 	{
 		tmp = ft_min_poids(param->tab_poids, NBR_ROOM);
 		ft_passed(param->tab_poids, NBR_ROOM, tmp);
+		if (tmp == NULL)
+			return (-1);
 		while (j < (NBR_ROOM + 1))
 		{
-			while (param->mat_adj[0][i].name != tmp)
+			while (tmp != NULL && param->mat_adj[0][i].name != tmp)
 				i++;
 			if (param->mat_adj[j][i].value == 1 && param->tab_poids[ft_tab_index(param->tab_poids, NBR_ROOM, param->mat_adj[j][0].name)].passed == 0)
 			{
@@ -150,11 +151,7 @@ int		ft_pathfinding(t_param *param)
 					|| param->tab_poids[ft_tab_index(param->tab_poids, NBR_ROOM, param->mat_adj[j][0].name)].poids > (param->tab_poids[ft_tab_index(param->tab_poids, NBR_ROOM, tmp)].poids + 1))
 				{
 					param->tab_poids[ft_tab_index(param->tab_poids, NBR_ROOM, param->mat_adj[j][0].name)].poids = param->tab_poids[ft_tab_index(param->tab_poids, NBR_ROOM, tmp)].poids + 1;
-					param->tab_ant[ft_tab_index(param->tab_poids, NBR_ROOM, param->mat_adj[j][0].name)].ante = tmp;
-					ft_show_data(param->tab_poids, param->tab_ant, NBR_ROOM, 2);
-					ft_show_data(param->tab_poids, param->tab_ant, NBR_ROOM, 1);					
-					printf("%s\n", ft_min_poids(param->tab_poids, NBR_ROOM));
-					printf("%d\n", param->tab_poids[0].passed);
+					param->tab_ant[ft_tab_index(param->tab_poids, NBR_ROOM, param->mat_adj[j][0].name)].ante = tmp;					
 				}
 			}
 			i = 0;
@@ -164,7 +161,7 @@ int		ft_pathfinding(t_param *param)
 	}
 	ft_show_data(param->tab_poids, param->tab_ant, NBR_ROOM, 1);
 	ft_show_data(param->tab_poids, param->tab_ant, NBR_ROOM, 2);
-	return (1);
+	return ((tmp == NULL) ? -1 : 1);
 }
 
 
