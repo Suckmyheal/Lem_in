@@ -24,7 +24,7 @@ typedef struct	s_room
 {
 	char	*name;
 	int		value;
-	int		end;
+	int		start;
 }				t_room;
 
 typedef struct	s_poids
@@ -44,8 +44,12 @@ typedef struct	s_param
 {
 	char	**save_map;
 	t_room	**mat_adj;
+	t_room	*tab_room;
 	t_poids	*tab_poids;
 	t_ante	*tab_ant;
+	int		part;
+	int		nbr_ant;
+	int		comm;
 }				t_param;
 
 int		ft_create_test(t_param *param);
