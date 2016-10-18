@@ -114,20 +114,67 @@ int		ft_room_exist(t_room *tab_room, char *roomname)
 	return (0);
 }
 
-int		ft_init_mat_adj(t_param *param)
+char	*ft_get_start(t_room *tab_room)
 {
 	int		i;
 
 	i = 0;
-	param->mat_adj = (t_room **)malloc(sizeof(t_room *) * ft_tab_room_len(param->tab_room));
-	while (i < ft_tab_room_len(param->tab_room))
+	while (i < ft_tab_room_len(tab_room))
 	{
-		param->mat_adj[i] = (t_room *)malloc(sizeof(t_room) * ft_tab_room_len(param->tab_room));
+		if (tab_room[i].start == 1)
+			return (tab_room[i].name);
 		i++;
 	}
-	i = 1;
+	return (NULL);
+}
+
+char	*ft_get_end(t_room *tab_room)
+{
+	int		i;
+
+	i = 0;
+	while (i < ft_tab_room_len(tab_room))
+	{
+		if (tab_room[i].start == 2)
+			return (tab_room[i].name);
+		i++;
+	}
+	return (NULL);
+}
+
+int		ft_init_mat_adj(t_param *param)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	if (ft_tab_room_len(param->tab_room) < 2 || ft_get_end(param->tab_room) == NULL || ft_get_start(param->tab_room) == NULL)
+		return (-1);
+	param->mat_adj = (t_room **)malloc(sizeof(t_room) * (ft_tab_room_len(param->tab_room) + 1));
+	while (i < (ft_tab_room_len(param->tab_room) + 1))
+	{
+		param->mat_adj[i] = (t_room *)malloc(sizeof(t_room) * (ft_tab_room_len(param->tab_room) + 1));
+		i++;
+	}
+	i = 2;
 	param->mat_adj[0][0].value = ft_tab_room_len(param->tab_room);
-	
+	while (i < param->mat_adj[0][0].value)
+	{
+		if (param->tab_room[j].start == 0)
+		{
+			param->mat_adj[0][i].name = param->tab_room[j].name;
+			param->mat_adj[i][0].name = param->tab_room[j].name;
+			i++;
+			j++;
+		}
+		else
+			j++;
+	}
+	param->mat_adj[0][1].name = ft_get_start(param->tab_room);
+	param->mat_adj[1][0].name = ft_get_start(param->tab_room);
+	param->mat_adj[0][ft_tab_room_len(param->tab_room)].name = ft_get_end(param->tab_room);
+	param->mat_adj[ft_tab_room_len(param->tab_room)][0].name = ft_get_end(param->tab_room);
 	return (1);
 }
 
@@ -136,20 +183,14 @@ int		ft_link_bis(t_room **mat_adj, char *name, char *name2)
 	int		i;
 	int		j;
 
-	i = 0;
-	j = 0;
+	i = 1;
+	j = 1;
 	while (ft_strcmp(mat_adj[0][i].name, name) != 0)
 		i++;
 	while (ft_strcmp(mat_adj[j][0].name, name2) != 0)
 		j++;
 	mat_adj[j][i].value = 1;
-	i = 0;
-	j = 0;
-	while (ft_strcmp(mat_adj[0][i].name, name2) != 0)
-		i++;
-	while (ft_strcmp(mat_adj[j][0].name, name) != 0)
-		j++;
-	mat_adj[j][i].value = 1;
+	mat_adj[i][j].value = 1;
 	return (1);
 }
 
@@ -165,7 +206,7 @@ int		ft_link(t_param *param, char *link)
 	if (ft_room_exist(param->tab_room, tab[0]) != 1 || ft_room_exist(param->tab_room, tab[1]) != 1)
 		return (0);
 	ft_link_bis(param->mat_adj, tab[0], tab[1]);
-
+	return (1);
 }
 
 int		ft_is_correct_line(char *line, t_param *param)
@@ -176,6 +217,7 @@ int		ft_is_correct_line(char *line, t_param *param)
 		return (0);
 	if (line[0] == '#')
 	{
+		printf("Comm\n");
 		if (ft_strcmp(line, "##start") == 0)
 			param->comm = 1;
 		if (ft_strcmp(line, "##end") == 0)
@@ -194,20 +236,27 @@ int		ft_is_correct_line(char *line, t_param *param)
 		tab = ft_strsplit(line, ' ');
 		if (tab[0])
 		{
+
 			param->tab_room = ft_add_roomname(param, tab[0]);
 			// verifier si coordonees entieres
 		}
 	}
 	if (param->part == 1 && ft_strchr(line, ' ') == NULL)
 	{
-		// Definition des liens commence
-		// Verifier si romm_name_1 et room_name_2 existe dans tab_room
+		//Definition des liems commence
+		ft_init_mat_adj(param);
+		if (ft_link(param, line) == 0)
+			return (0);
 		param->part++;
 	}
-	if (param->part == 2)
+	else if (param->part == 2)
 	{
-		// Verifier si romm_name_1 et room_name_2 existe dans tab_room
-		// Definition des liens
+		printf("LIEN\n");
+		if (ft_link(param, line) == 0)
+		{
+			printf("FIN\n");
+			return (0);
+		}
 	}
 	return (1);
 }
@@ -222,6 +271,33 @@ void	ft_show_data_bis(t_room *tab_room)
 	{
 		printf("Name Room = %s\n", tab_room[i].name);
 		printf("Start = %d\n", tab_room[i].start);
+		printf("\n");
+		i++;
+	}
+}
+
+void	ft_show_data_ter(t_room **mat_adj)
+{
+	int 	i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (i <= mat_adj[0][0].value)
+	{
+		while (j <= mat_adj[0][0].value)
+		{
+			if (i == 0 && j == 0)
+				printf("%d ", mat_adj[0][0].value);
+			else if (i == 0 || j == 0)
+			{
+				printf("%s ", mat_adj[i][j].name);
+			}
+			else
+				printf("%d ", mat_adj[i][j].value);
+			j++;
+		}
+		j = 0;
 		printf("\n");
 		i++;
 	}
@@ -258,6 +334,8 @@ int		main(int ac, char **av)
 	while (get_next_line(0, &line) == 1 && ft_is_correct_line(line, &param) != 0)
 	{
 	}
-	ft_show_data_bis(param.tab_room);
+	ft_show_data_ter(param.mat_adj);
+	printf("end = %s\n", param.mat_adj[0][ft_tab_room_len(param.tab_room)].name);
+	ft_pathfinding(&param);
 	return (0);
 }

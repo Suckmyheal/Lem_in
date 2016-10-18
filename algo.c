@@ -19,7 +19,7 @@ int		ft_init_tables(t_param *param)
 
 	i = 0;
 	param->tab_poids = (t_poids *)malloc(sizeof(t_poids) * NBR_ROOM);
-	while (i < 7)
+	while (i < NBR_ROOM)
 	{
 		param->tab_poids[i].name = param->mat_adj[0][i + 1].name;
 		param->tab_poids[i].poids = -1;
@@ -30,7 +30,7 @@ int		ft_init_tables(t_param *param)
 	}
 	i = 0;
 	param->tab_ant = (t_ante *)malloc(sizeof(t_ante) * NBR_ROOM);
-	while (i < 7)
+	while (i < NBR_ROOM)
 	{
 		param->tab_ant[i].name = param->mat_adj[0][i + 1].name;
 		param->tab_ant[i].ante = NULL;
@@ -163,12 +163,4 @@ int		ft_pathfinding(t_param *param)
 	ft_show_data(param->tab_poids, param->tab_ant, NBR_ROOM, 2);
 	return ((tmp == NULL) ? -1 : 1);
 }
-
-
-
-
-
-
-
-
 
