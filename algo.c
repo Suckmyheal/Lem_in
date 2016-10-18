@@ -159,8 +159,6 @@ int		ft_pathfinding(t_param *param)
 		}
 		j = 0;
 	}
-	ft_show_data(param->tab_poids, param->tab_ant, NBR_ROOM, 1);
-	ft_show_data(param->tab_poids, param->tab_ant, NBR_ROOM, 2);
 	return ((tmp == NULL) ? -1 : 1);
 }
 
